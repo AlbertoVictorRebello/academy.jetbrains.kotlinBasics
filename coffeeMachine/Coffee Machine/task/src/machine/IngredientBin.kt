@@ -26,7 +26,7 @@ internal class IngredientBin(private val name: String) {
             ingredient.unitOfMeasurement = item.unitOfMeasurement
             System.out.printf("Write how many %s of %s the coffee machine has:", item.unitOfMeasurement, item.name)
             input = scanner.nextFloat();
-            input = item.quantity
+            //input = item.quantity
             ingredient.quantity = input
             stock.add(ingredient)
         }

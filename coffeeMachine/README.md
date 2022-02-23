@@ -17,4 +17,4 @@ Kotlin BasicsKotlin DeveloperFirst Glance at Android
 |Stage 6/6: Brush up your code|Time for some final touch-ups: structure the code so that it runs smoothly.|
 
 ### GitHub repository organization
-<<to be updated>>
+<<to be updated with more information>>
