@@ -25,11 +25,8 @@ class CoffeeMachine {
     }
 
     fun switchOn() {
-//        println("Write action (buy, fill, take, remaining, exit):")
-
-        var stage4Counter: Int = 0 // Apenas durante o stage 4
-//        var action = scanner.next()
-        var action = "remaining"
+        println("Write action (buy, fill, take, remaining, exit):")
+        var action = scanner.next()
 
         while ("exit" != action) {
             when (action) {
@@ -60,18 +57,8 @@ class CoffeeMachine {
                     println("$$moneyBin02 of money")
                 }
             }
-
-            stage4Counter++
-            if (stage4Counter == 1) {
-                println("Write action (buy, fill, take, remaining, exit):")
-                action = scanner.next()
-
-            } else if (stage4Counter == 2){
-                action = "remaining"
-            } else {
-                action = "exit"
-            }
-
+            println("Write action (buy, fill, take, remaining, exit):")
+            action = scanner.next()
         }
     }
 
