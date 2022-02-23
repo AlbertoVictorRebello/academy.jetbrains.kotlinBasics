@@ -9,7 +9,8 @@ class CoffeeMachine {
         loadRecipe("SETUP"),
         loadRecipe("ESPRESSO"),
         loadRecipe("LATTE"),
-        loadRecipe("CAPPUCCINO")
+        loadRecipe("CAPPUCCINO"),
+        loadRecipe("SOFT_LATTE")
     )
     private val ingredientBin01: IngredientBin = IngredientBin("INGREDIENT_BIN_1")
     init {
@@ -18,6 +19,21 @@ class CoffeeMachine {
 
     constructor(scanner: Scanner) {
         this.scanner = scanner;
+    }
+
+    fun displayMessage(message: String) {
+        println(
+            when (message) {
+                "COFFEE_PREPARATION" -> "Starting to make a coffee\n" +
+                        "Grinding coffee beans\n" +
+                        "Boiling water\n" +
+                        "Mixing boiled water with crushed coffee beans\n" +
+                        "Pouring coffee into the cup\n" +
+                        "Pouring some milk into the cup\n" +
+                        "Coffee is ready!";
+                else -> message
+            }
+        );
     }
 
     fun loadRecipe(name: String): Recipe {
@@ -77,7 +93,7 @@ class CoffeeMachine {
         return recipe
     }
 
-    public fun supplyForecast(recipe: Recipe) {
+    fun supplyForecast(recipe: Recipe) {
         println("Write how many cups of coffee you will need:");
         val demand = scanner.nextInt();
         var message = "For $demand cups of coffee you will need:\n";
@@ -89,18 +105,53 @@ class CoffeeMachine {
         displayMessage(message);
     }
 
-    private fun displayMessage(message: String) {
-        println(
-            when (message) {
-            "COFFEE_PREPARATION" -> "Starting to make a coffee\n" +
-                    "Grinding coffee beans\n" +
-                    "Boiling water\n" +
-                    "Mixing boiled water with crushed coffee beans\n" +
-                    "Pouring coffee into the cup\n" +
-                    "Pouring some milk into the cup\n" +
-                    "Coffee is ready!";
-            else -> message
+    fun outputForecast(recipe: Recipe = recipeList[4], verbose: Boolean = true, quantity: Int = 0): Int {
+        //Scanner scanner = new Scanner(System.in);
+        var demand: Int = quantity
+        var output: Int = 0
+        var missingIngredients = ArrayList<String>()
+        var minOutput = Integer.MAX_VALUE;
+
+        if (quantity > 0) {
+            demand = quantity
+        } else {
+            System.out.println("Write how many cups of coffee you will need:");
+            demand = scanner.nextInt();
         }
-        );
+
+        for (itemRecipe in recipe.ingredients) {
+            for (itemBin in ingredientBin01.stock) {
+                if (itemRecipe.name == itemBin.name) {
+                    output = (itemBin.quantity / itemRecipe.quantity).toInt()
+                    minOutput = Math.min(minOutput, output)
+                }
+                if (demand > output) {
+                    missingIngredients.add(itemBin.name)
+                }
+            }
+        }
+
+        if (demand == minOutput) {
+            if (verbose) {
+                displayMessage("Yes, I can make that amount of coffee");
+                //displayMessage("I have enough resources, making you a coffee!");
+            }
+            return minOutput;
+        } else if (demand > minOutput) {
+            if (verbose) {
+                displayMessage(String.format("No, I can make only %s cup(s) of coffee", minOutput));
+//                for (item in missingIngredients) {
+//                    System.out.printf("Sorry, not enough %s!\n", item);
+//                }
+            }
+            return 0
+        } else {
+            if (verbose) {
+                displayMessage(String.format("Yes, I can make that amount of coffee (and even %s more than that)", minOutput - demand));
+//                displayMessage("I have enough resources, making you a coffee!");
+            }
+            return minOutput - demand
+        }
     }
 }
+
