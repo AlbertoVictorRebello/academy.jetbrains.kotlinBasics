@@ -1,31 +1,10 @@
 package machine
 
-class Ingredient(name: String, unitOfMeasurement: String, quantity: Float ) {
-    internal var name: String = name
-    internal var unitOfMeasurement: String = unitOfMeasurement
-    internal var quantity: Float = quantity
+class Ingredient(
+    internal var name: String,
+    internal var unitOfMeasurement: String,
+    internal var quantity: Float = 0.0f
+) {
 
-    fun getName(): String {
-        return name
-    }
-
-    fun setName(name: String) {
-        this.name = name!!
-    }
-
-    fun getUnitOfMeasurement(): String {
-        return unitOfMeasurement
-    }
-
-    fun setUnitOfMeasurement(unitOfMeasurement: String) {
-        this.unitOfMeasurement = unitOfMeasurement!!
-    }
-
-    fun getQuantity(): Float {
-        return quantity
-    }
-
-    fun setQuantity(quantity: Float) {
-        this.quantity = quantity
-    }
+    constructor() : this("","",0f)
 }

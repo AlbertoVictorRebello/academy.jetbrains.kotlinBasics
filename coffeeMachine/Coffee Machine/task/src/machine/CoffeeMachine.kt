@@ -1,7 +1,6 @@
 package machine
 
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class CoffeeMachine {
@@ -12,6 +11,10 @@ class CoffeeMachine {
         loadRecipe("LATTE"),
         loadRecipe("CAPPUCCINO")
     )
+    private val ingredientBin01: IngredientBin = IngredientBin("INGREDIENT_BIN_1")
+    init {
+        ingredientBin01.supply(recipeList[0])
+    }
 
     constructor(scanner: Scanner) {
         this.scanner = scanner;
@@ -79,11 +82,10 @@ class CoffeeMachine {
         val demand = scanner.nextInt();
         var message = "For $demand cups of coffee you will need:\n";
         for (item in recipe.ingredients!!) {
-            message += String.format("%d %s of %s\n", (item!!.getQuantity() * demand).toInt(),
-                item.getUnitOfMeasurement(),
-                item.getName());
+            message += String.format("%d %s of %s\n", (item!!.quantity * demand).toInt(),
+                item.unitOfMeasurement,
+                item.name)
         }
-
         displayMessage(message);
     }
 

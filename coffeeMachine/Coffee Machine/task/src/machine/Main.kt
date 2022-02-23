@@ -6,7 +6,8 @@ public fun main() {
     val coffeeMachine: CoffeeMachine = CoffeeMachine(Scanner(System.`in`));
 
     //coffeeMachine.loadRecipe("SETUP")
-    coffeeMachine.supplyForecast(coffeeMachine.loadRecipe("SOFT_LATTE"))
+//    coffeeMachine.supplyForecast(coffeeMachine.loadRecipe("SOFT_LATTE"))
+
 
 }
 
