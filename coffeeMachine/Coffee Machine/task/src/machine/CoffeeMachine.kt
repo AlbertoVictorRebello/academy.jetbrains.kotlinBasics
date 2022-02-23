@@ -17,9 +17,64 @@ class CoffeeMachine {
         ingredientBin01.supply(recipeList[0])
     }
 
+    private var moneyBin02: Int = recipeList[0].price.toInt()
+    private var disposableCups: Int = recipeList[0].output
+
     constructor(scanner: Scanner) {
         this.scanner = scanner;
     }
+
+    fun switchOn() {
+//        println("Write action (buy, fill, take, remaining, exit):")
+
+        var stage4Counter: Int = 0 // Apenas durante o stage 4
+//        var action = scanner.next()
+        var action = "remaining"
+
+        while ("exit" != action) {
+            when (action) {
+                "buy" -> {
+                    println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:")
+                    val option = scanner.next()
+                    if ("back" != option) {
+                        val product = option.toInt()
+                        if (outputForecast(recipeList[product], false, 1) > 0 && disposableCups > 0) {
+                            moneyBin02 += recipeList[product].price.toInt()
+                            disposableCups--
+                            ingredientBin01.deploy(recipeList[product])
+                        }
+                    }
+                }
+                "fill" -> {
+                    ingredientBin01.supply()
+                    println("Write how many disposable cups of coffee you want to add:")
+                    disposableCups += scanner.nextInt()
+                }
+                "take" -> {
+                    System.out.printf("I gave you $%d\n\n", moneyBin02)
+                    moneyBin02 = 0
+                }
+                "remaining" -> {
+                    ingredientBin01.displayStock()
+                    println(disposableCups.toString() + " disposable cups")
+                    println("$$moneyBin02 of money")
+                }
+            }
+
+            stage4Counter++
+            if (stage4Counter == 1) {
+                println("Write action (buy, fill, take, remaining, exit):")
+                action = scanner.next()
+
+            } else if (stage4Counter == 2){
+                action = "remaining"
+            } else {
+                action = "exit"
+            }
+
+        }
+    }
+
 
     fun displayMessage(message: String) {
         println(
@@ -54,9 +109,9 @@ class CoffeeMachine {
                 recipe.preparationTime = 10
                 recipe.addIngredient(Ingredient("water", "ml", 250f))
                 recipe.addIngredient(Ingredient("milk", "ml", 0f))
-                recipe.addIngredient(Ingredient("coffee beans", "g", 160f))
+                recipe.addIngredient(Ingredient("coffee beans", "g", 16f))
                 recipe.packingType = PackingType.CUP_OF_300_ML
-                recipe.output = 9
+                recipe.output = 1
                 recipe.price = 4F
             }
             "LATTE" -> {
@@ -147,8 +202,8 @@ class CoffeeMachine {
             return 0
         } else {
             if (verbose) {
-                displayMessage(String.format("Yes, I can make that amount of coffee (and even %s more than that)", minOutput - demand));
-//                displayMessage("I have enough resources, making you a coffee!");
+//                displayMessage(String.format("Yes, I can make that amount of coffee (and even %s more than that)", minOutput - demand));
+                displayMessage("I have enough resources, making you a coffee!");
             }
             return minOutput - demand
         }

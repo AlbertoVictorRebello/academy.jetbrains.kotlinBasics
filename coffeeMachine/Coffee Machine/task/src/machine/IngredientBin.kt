@@ -18,15 +18,19 @@ internal class IngredientBin(private val name: String) {
         }
     }
 
-    fun supply(recipe: Recipe): Boolean {
+    fun supply(recipe: Recipe, customQuantity: Boolean = false): Boolean {
         var input: Float
         for (item in recipe.ingredients) {
             val ingredient = Ingredient()
             ingredient.name =item.name
             ingredient.unitOfMeasurement = item.unitOfMeasurement
-            System.out.printf("Write how many %s of %s the coffee machine has:", item.unitOfMeasurement, item.name)
-            input = scanner.nextFloat();
-            //input = item.quantity
+            if (customQuantity) {
+                System.out.printf("Write how many %s of %s the coffee machine has:", item.unitOfMeasurement, item.name)
+                input = scanner.nextFloat();
+            } else {
+                input = item.quantity
+            }
+
             ingredient.quantity = input
             stock.add(ingredient)
         }

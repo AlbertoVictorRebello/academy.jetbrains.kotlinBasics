@@ -7,7 +7,7 @@ public fun main() {
 
     //coffeeMachine.loadRecipe("SETUP")
 //    coffeeMachine.supplyForecast(coffeeMachine.loadRecipe("SOFT_LATTE"))
-    coffeeMachine.outputForecast()
+    coffeeMachine.switchOn()
 
 
 }
