@@ -15,3 +15,6 @@ Kotlin BasicsKotlin DeveloperFirst Glance at Android
 |Stage 4/6: Buy, fill, take!|Teach your virtual coffee machine to perform three basic actions: collect the money, renew the supplies, and serve the coffee.|
 |Stage 5/6: Keep track of the supplies|Program the machine to display on the screen the amount of supplies left. Set the main loop: now the menu keeps updating until you enter “exit”.|
 |Stage 6/6: Brush up your code|Time for some final touch-ups: structure the code so that it runs smoothly.|
+
+### GitHub repository organization
+<<to be updated>>
