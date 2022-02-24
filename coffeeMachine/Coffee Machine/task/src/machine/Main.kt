@@ -2,7 +2,7 @@ package machine
 
 import java.util.*
 
-public fun main() {
+fun main() {
     val scanner = Scanner(System.`in`)
     val coffeeMachine: CoffeeMachine = CoffeeMachine()
     var option: String

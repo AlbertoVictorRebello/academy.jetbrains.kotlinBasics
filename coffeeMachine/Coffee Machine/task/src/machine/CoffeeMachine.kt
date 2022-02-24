@@ -11,65 +11,13 @@ class CoffeeMachine {
         loadRecipe("CAPPUCCINO"),
         loadRecipe("SOFT_LATTE")
     )
-    private val ingredientBin01: IngredientBin = IngredientBin("INGREDIENT_BIN_1")
+    private val ingredientBin: IngredientBin = IngredientBin("INGREDIENT_BIN_1")
     init {
-        ingredientBin01.supply(recipeList[0])
+        ingredientBin.supply(recipeList[0])
     }
 
-    private var moneyBin02: Int = recipeList[0].price.toInt()
+    private var moneyBin: Int = recipeList[0].price.toInt()
     private var disposableCups: Int = recipeList[0].output
-
-    fun switchOn(action: String, option: String? = null): String {
-        when (action) {
-            "buy" -> {
-                if ("back" != option) {
-                    val product = option!!.toInt()
-                    if (outputForecast(recipeList[product], true, 1) > 0 && disposableCups > 0) {
-                        moneyBin02 += recipeList[product].price.toInt()
-                        disposableCups--
-                        ingredientBin01.deploy(recipeList[product])
-                    }
-                }
-                return action
-            }
-            "fill" -> {
-                if(null == option) {
-                    ingredientBin01.supply()
-                } else {
-                    disposableCups += option!!.toInt()
-                }
-                return action
-            }
-            "take" -> {
-                val amounth = "I gave you $moneyBin02\n\n"
-                moneyBin02 = 0
-                return amounth
-            }
-            "remaining" -> {
-                ingredientBin01.displayStock()
-                 return "$disposableCups disposable cups\n\$$moneyBin02 of money"
-            }
-            else -> {
-                return action
-            }
-        }
-    }
-
-
-    fun displayMessage(message: String) {
-        println(
-            when (message) {
-                "COFFEE_PREPARATION" -> "Starting to make a coffee\n" +
-                        "Grinding coffee beans\n" +
-                        "Boiling water\n" +
-                        "Mixing boiled water with crushed coffee beans\n" +
-                        "Pouring coffee into the cup\n" +
-                        "Pouring some milk into the cup\n" +
-                        "Coffee is ready!";
-                else -> message
-            }
-        );
-    }
 
     fun loadRecipe(name: String): Recipe {
         val recipe = Recipe()
@@ -128,6 +76,57 @@ class CoffeeMachine {
         return recipe
     }
 
+    fun switchOn(action: String, option: String? = null): String {
+        when (action) {
+            "buy" -> {
+                if ("back" != option) {
+                    val product = option!!.toInt()
+                    if (outputForecast(recipeList[product], true, 1) > 0 && disposableCups > 0) {
+                        moneyBin += recipeList[product].price.toInt()
+                        disposableCups--
+                        ingredientBin.deploy(recipeList[product])
+                    }
+                }
+                return action
+            }
+            "fill" -> {
+                if(null == option) {
+                    ingredientBin.supply()
+                } else {
+                    disposableCups += option!!.toInt()
+                }
+                return action
+            }
+            "take" -> {
+                val amounth = "I gave you $moneyBin\n\n"
+                moneyBin = 0
+                return amounth
+            }
+            "remaining" -> {
+                ingredientBin.displayStock()
+                 return "$disposableCups disposable cups\n\$$moneyBin of money"
+            }
+            else -> {
+                return action
+            }
+        }
+    }
+
+    fun displayMessage(message: String) {
+        println(
+            when (message) {
+                "COFFEE_PREPARATION" -> "Starting to make a coffee\n" +
+                        "Grinding coffee beans\n" +
+                        "Boiling water\n" +
+                        "Mixing boiled water with crushed coffee beans\n" +
+                        "Pouring coffee into the cup\n" +
+                        "Pouring some milk into the cup\n" +
+                        "Coffee is ready!";
+                else -> message
+            }
+        );
+    }
+
     fun supplyForecast(recipe: Recipe, demand: Int) {
         println("Write how many cups of coffee you will need:");
         var message = "For $demand cups of coffee you will need:\n";
@@ -147,7 +146,7 @@ class CoffeeMachine {
         var minOutput = Integer.MAX_VALUE;
 
         for (itemRecipe in recipe.ingredients) {
-            for (itemBin in ingredientBin01.stock) {
+            for (itemBin in ingredientBin.stock) {
                 if (itemRecipe.name == itemBin.name) {
                     output = (itemBin.quantity / itemRecipe.quantity).toInt()
                     minOutput = Math.min(minOutput, output)
