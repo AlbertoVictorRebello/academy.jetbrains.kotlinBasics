@@ -18,6 +18,4 @@ Kotlin BasicsKotlin DeveloperFirst Glance at Android
 |Stage 6/6|Brush up your code: Time for some final touch-ups: structure the code so that it runs smoothly.|
 
 ### GitHub repository organization
-The approuved project' solution is available on master branch. 
-There are a specific branch for each of all 6 stages. 
-
+The approved project' solution is available on master branch. There is a specific branch for each of all 6 stages.
