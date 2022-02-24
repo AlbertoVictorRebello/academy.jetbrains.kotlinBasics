@@ -4,7 +4,6 @@ import java.util.*
 
 
 class CoffeeMachine {
-    private val scanner: Scanner;
     private val recipeList = arrayOf<Recipe>(
         loadRecipe("SETUP"),
         loadRecipe("ESPRESSO"),
@@ -20,45 +19,39 @@ class CoffeeMachine {
     private var moneyBin02: Int = recipeList[0].price.toInt()
     private var disposableCups: Int = recipeList[0].output
 
-    constructor(scanner: Scanner) {
-        this.scanner = scanner;
-    }
-
-    fun switchOn() {
-        println("Write action (buy, fill, take, remaining, exit):")
-        var action = scanner.next()
-
-        while ("exit" != action) {
-            when (action) {
-                "buy" -> {
-                    println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:")
-                    val option = scanner.next()
-                    if ("back" != option) {
-                        val product = option.toInt()
-                        if (outputForecast(recipeList[product], false, 1) > 0 && disposableCups > 0) {
-                            moneyBin02 += recipeList[product].price.toInt()
-                            disposableCups--
-                            ingredientBin01.deploy(recipeList[product])
-                        }
+    fun switchOn(action: String, option: String? = null): String {
+        when (action) {
+            "buy" -> {
+                if ("back" != option) {
+                    val product = option!!.toInt()
+                    if (outputForecast(recipeList[product], true, 1) > 0 && disposableCups > 0) {
+                        moneyBin02 += recipeList[product].price.toInt()
+                        disposableCups--
+                        ingredientBin01.deploy(recipeList[product])
                     }
                 }
-                "fill" -> {
-                    ingredientBin01.supply()
-                    println("Write how many disposable cups of coffee you want to add:")
-                    disposableCups += scanner.nextInt()
-                }
-                "take" -> {
-                    System.out.printf("I gave you $%d\n\n", moneyBin02)
-                    moneyBin02 = 0
-                }
-                "remaining" -> {
-                    ingredientBin01.displayStock()
-                    println(disposableCups.toString() + " disposable cups")
-                    println("$$moneyBin02 of money")
-                }
+                return action
             }
-            println("Write action (buy, fill, take, remaining, exit):")
-            action = scanner.next()
+            "fill" -> {
+                if(null == option) {
+                    ingredientBin01.supply()
+                } else {
+                    disposableCups += option!!.toInt()
+                }
+                return action
+            }
+            "take" -> {
+                val amounth = "I gave you $moneyBin02\n\n"
+                moneyBin02 = 0
+                return amounth
+            }
+            "remaining" -> {
+                ingredientBin01.displayStock()
+                 return "$disposableCups disposable cups\n\$$moneyBin02 of money"
+            }
+            else -> {
+                return action
+            }
         }
     }
 
@@ -135,9 +128,8 @@ class CoffeeMachine {
         return recipe
     }
 
-    fun supplyForecast(recipe: Recipe) {
+    fun supplyForecast(recipe: Recipe, demand: Int) {
         println("Write how many cups of coffee you will need:");
-        val demand = scanner.nextInt();
         var message = "For $demand cups of coffee you will need:\n";
         for (item in recipe.ingredients!!) {
             message += String.format("%d %s of %s\n", (item!!.quantity * demand).toInt(),
@@ -147,44 +139,37 @@ class CoffeeMachine {
         displayMessage(message);
     }
 
-    fun outputForecast(recipe: Recipe = recipeList[4], verbose: Boolean = true, quantity: Int = 0): Int {
+    fun outputForecast(recipe: Recipe = recipeList[4], verbose: Boolean = true, quantity: Int): Int {
         //Scanner scanner = new Scanner(System.in);
         var demand: Int = quantity
         var output: Int = 0
         var missingIngredients = ArrayList<String>()
         var minOutput = Integer.MAX_VALUE;
 
-        if (quantity > 0) {
-            demand = quantity
-        } else {
-            System.out.println("Write how many cups of coffee you will need:");
-            demand = scanner.nextInt();
-        }
-
         for (itemRecipe in recipe.ingredients) {
             for (itemBin in ingredientBin01.stock) {
                 if (itemRecipe.name == itemBin.name) {
                     output = (itemBin.quantity / itemRecipe.quantity).toInt()
                     minOutput = Math.min(minOutput, output)
+
+                    if (demand > output) {
+                        missingIngredients.add(itemBin.name)
+                    }
                 }
-                if (demand > output) {
-                    missingIngredients.add(itemBin.name)
-                }
+
             }
         }
 
         if (demand == minOutput) {
             if (verbose) {
-                displayMessage("Yes, I can make that amount of coffee");
-                //displayMessage("I have enough resources, making you a coffee!");
+                displayMessage("I have enough resources, making you a coffee!\n");
             }
             return minOutput;
         } else if (demand > minOutput) {
             if (verbose) {
-                displayMessage(String.format("No, I can make only %s cup(s) of coffee", minOutput));
-//                for (item in missingIngredients) {
-//                    System.out.printf("Sorry, not enough %s!\n", item);
-//                }
+                for (item in missingIngredients) {
+                    System.out.printf("Sorry, not enough %s!\n", item);
+                }
             }
             return 0
         } else {
