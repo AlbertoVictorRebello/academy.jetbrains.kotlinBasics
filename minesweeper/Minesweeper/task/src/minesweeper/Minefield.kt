@@ -2,17 +2,19 @@ package minesweeper
 
 import kotlin.random.Random
 
-const val MARKED_SYMBOL = '.'
-const val MINE_SYMBOL = 'X'
-const val UNMARKED_SYMBOL = '\u002A'
-
 class Minefield(
     private val rows: Int = 9,
     private val columns: Int = 9,
     private val numberOfMines: Int = 10) {
 
+    companion object {
+        const val MARKED_SYMBOL = '.'
+        const val MINE_SYMBOL = 'X'
+        const val UNMARKED_SYMBOL = '\u002A'
+    }
+
     internal var settedMines = 0
-    get() = field
+    private var action = ""
     private var calculatedFactor = numberOfMines.toDouble() / (rows.toDouble() * columns.toDouble())
     private val minefield = MutableList<MutableList<Char>>(rows) {
         MutableList<Char>(columns) { setCell(calculatedFactor) }}
@@ -23,7 +25,7 @@ class Minefield(
         setCell(numberOfMines - settedMines)
     }
 
-    // Defines if the sell is 'safe' or is a 'mine'
+    // This function defines if the sell is 'safe' or is a 'mine'
     private fun setCell(factor: Double): Char {
         val random = Random.Default
         return if (random.nextDouble() <= factor && settedMines < numberOfMines) {
@@ -32,6 +34,7 @@ class Minefield(
         } else MARKED_SYMBOL
     }
 
+    // This function sets the total 'mines' quantity defined by the player
     private fun setCell(mineUnbalance: Int): Int {
         val random = Random.Default
         var counter = mineUnbalance
@@ -49,6 +52,7 @@ class Minefield(
         return counter
     }
 
+    // This function identifies the number of mines around a cell. Return as Char to be added to the minefield mapping object
     private fun checkMinesAround(elementRow: Int, elementColumn: Int): Char {
         if (minefield[elementRow][elementColumn] == MINE_SYMBOL) return MARKED_SYMBOL
 
@@ -70,6 +74,9 @@ class Minefield(
         return if (counter > 0) counter.toString().first() else MARKED_SYMBOL
     }
 
+    // This function checks a given cell is not a number and so toggles marked - unmarked symbol.
+    // If the cell is a 'mine' the settedMines variable is updated. It may return the minefield information or a message.
+    @Deprecated("This function is supered")
     fun checkCell(row: Int, column: Int): String {
         return if (minefieldCopy[row - 1][column - 1].isDigit()) {
             "There is a number here!"
@@ -91,6 +98,22 @@ class Minefield(
             printMinefield(true, false)
         }
     }
+
+    // This function checks recursively if a given cell is not a number and so changes its symbol in acordance with the setted action.
+    // If the cell is a 'mine' the settedMines variable is updated. It may return the minefield information or a message.
+    fun checkCell(row: Int, column: Int, action: String = ""): Int {
+        if ("" != action) this.action = action
+
+
+        this.action = ""
+        return 0
+    }
+
+    fun checkCell(symbol: Char): Int {
+        return 0
+
+    }
+
     fun printMinefield(numberView: Boolean = false, resetNumberView: Boolean = false): String {
         if (numberView) {
             if (resetNumberView) {

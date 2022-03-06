@@ -1,18 +1,31 @@
 package minesweeper
 
 private fun main() {
-    // Stage 4
+    // Stage 5
     println("How many mines do you want on the field?")
     val numberOfMines = readLine()!!.toInt()
     val minefield = Minefield(numberOfMines = numberOfMines)
+    var theWinnerIs = ""
     println(minefield.printMinefield(true, true))
 
-    while (minefield.settedMines > 0) {
-        println("Set/delete mine marks (x and y coordinates):")
-        val (y, x) = readLine()!!.split(" ").map { it.toInt() }
-        println(minefield.checkCell(x, y))
+    while (theWinnerIs == "") {
+        println("Set/unset mine marks or claim a cell as free:")
+        val (inputY, inputX, action) = readLine()!!.split(" ")
+        val x = inputX.toInt()
+        val y = inputY.toInt()
+
+        println(minefield.checkCell(x, y, action))
+        if (minefield.settedMines == 0) theWinnerIs = "player"
+        if (minefield.checkCell(Minefield.MARKED_SYMBOL) == 0) theWinnerIs = "player"
     }
-    print("Congratulations! You found all the mines!")
+    if ("player".equals(theWinnerIs)) {
+        print("Congratulations! You found all the mines!")
+    } else if ("computer".equals(theWinnerIs)) {
+        print("You stepped on a mine and failed!")
+    } else {
+        print("Ops!")
+    }
+
 
 
 }
