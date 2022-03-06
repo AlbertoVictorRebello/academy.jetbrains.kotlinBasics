@@ -5,6 +5,6 @@ private fun main() {
     println("How many mines do you want on the field?")
     val numberOfMines = readLine()!!.toInt()
     val minefield = Minefield(numberOfMines = numberOfMines)
-    print(minefield.printMinefield())
+    println(minefield.printMinefield(true))
 }
 

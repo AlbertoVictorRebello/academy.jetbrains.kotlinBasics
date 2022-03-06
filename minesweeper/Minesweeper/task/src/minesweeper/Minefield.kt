@@ -1,5 +1,6 @@
 package minesweeper
 
+import kotlin.math.min
 import kotlin.random.Random
 
 const val SAFE_SYMBOL = '.'
@@ -45,7 +46,41 @@ class Minefield(
         return counter
     }
 
-    fun printMinefield(): String {
-        return minefield.map { it.joinToString("") }.joinToString("\n")
+
+    private fun checkMinesAround(elementRow: Int, elementColumn: Int): Char {
+        if (minefield[elementRow][elementColumn] == MINE_SYMBOL) return MINE_SYMBOL
+
+        val baseRow = if (elementRow - 1 >= 0) elementRow - 1 else 0
+        val baseColumn = if (elementColumn - 1 >= 0) elementColumn - 1 else 0
+        val topRow = if (elementRow + 1 <= minefield.lastIndex) elementRow + 1 else minefield.lastIndex
+        val topColumn = if (elementColumn + 1 <= minefield[minefield.lastIndex].lastIndex) elementColumn + 1 else minefield[minefield.lastIndex].lastIndex
+
+        var counter: Int = 0
+
+        for (row in baseRow..topRow) {
+            for (column in baseColumn..topColumn) {
+                if (!(elementRow == row && elementColumn == column)) {
+                    if (minefield[row][column] == MINE_SYMBOL) counter++
+                }
+            }
+        }
+
+        return if (counter > 0) counter.toString().first() else SAFE_SYMBOL
+    }
+
+    fun printMinefield(numberView: Boolean = false): String {
+        if (numberView) {
+            val minefieldCopy = MutableList<MutableList<Char>>(rows) {
+                MutableList<Char>(columns) { SAFE_SYMBOL }}
+            for (row in 0 until minefield.size) {
+                for (column in 0 until minefield[row].size) {
+                    minefieldCopy[row][column] = checkMinesAround(row, column)
+                }
+            }
+            return minefieldCopy.map {it.joinToString ( "" )}.joinToString("\n")
+
+        } else {
+            return minefield.map { it.joinToString("") }.joinToString("\n")
+        }
     }
 }
