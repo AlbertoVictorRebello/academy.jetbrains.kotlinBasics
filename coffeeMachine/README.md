@@ -19,3 +19,6 @@ Kotlin BasicsKotlin DeveloperFirst Glance at Android
 
 ### GitHub repository organization
 The approved project' solution is available on master branch. There is a specific branch for each of all 6 stages.
+
+### UML class diagram
+Open the UML class diagram at www.draw.io
