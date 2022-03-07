@@ -6,7 +6,9 @@ private fun main() {
     val numberOfMines = readLine()!!.toInt()
     val minefield = Minefield(numberOfMines = numberOfMines)
     var theWinnerIs = ""
-    println(minefield.printMinefield(true, true))
+
+    println(minefield.printMinefield(true))
+
 
     while (theWinnerIs == "") {
         println("Set/unset mine marks or claim a cell as free:")
@@ -14,19 +16,19 @@ private fun main() {
         val x = inputX.toInt()
         val y = inputY.toInt()
 
-        println(minefield.checkCell(x, y, action))
+        theWinnerIs = minefield.checkCell(x, y, action)
+        println(minefield.printMinefield())
+
         if (minefield.settedMines == 0) theWinnerIs = "player"
         if (minefield.checkCell(Minefield.MARKED_SYMBOL) == 0) theWinnerIs = "player"
     }
-    if ("player".equals(theWinnerIs)) {
+    if ("player" == theWinnerIs) {
         print("Congratulations! You found all the mines!")
-    } else if ("computer".equals(theWinnerIs)) {
+    } else if ("computer" == theWinnerIs) {
         print("You stepped on a mine and failed!")
     } else {
         print("Ops!")
     }
-
-
 
 }
 
