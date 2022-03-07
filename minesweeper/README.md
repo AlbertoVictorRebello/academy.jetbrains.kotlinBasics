@@ -20,3 +20,5 @@ Kotlin BasicsKotlin DeveloperFirst Glance at Android
 The approuved project' solution is available on master branch. 
 There are a specific branch for each of all 5 stages. 
 
+### UML class diagram
+Open the UML class diagram at www.draw.io
